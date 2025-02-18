@@ -9,8 +9,6 @@ import (
 	"os"
 	"path/filepath"
 	"time"
-
-	gosxnotifier "github.com/deckarep/gosx-notifier"
 )
 
 const (
@@ -20,7 +18,10 @@ const (
 	appName       = "silksong-monitor"
 )
 
-var stateFile string
+var (
+	stateFile string
+	iconPath  string
+)
 
 func init() {
 	homeDir, err := os.UserHomeDir()
@@ -35,6 +36,7 @@ func init() {
 	}
 
 	stateFile = filepath.Join(appDir, "lastcommit.txt")
+	iconPath = filepath.Join(homeDir, "Library", "Applications", "silksong-monitor", "logo.png")
 }
 
 type CommitResponse struct {
@@ -85,21 +87,6 @@ func saveLastCommit(sha string) error {
 	return os.WriteFile(stateFile, []byte(sha), 0644)
 }
 
-func sendNotification() error {
-	homeDir, err := os.UserHomeDir()
-	if err != nil {
-		return fmt.Errorf("could not get home directory: %v", err)
-	}
-
-	note := gosxnotifier.NewNotification("Silksong status page has been updated!")
-	note.Title = "Silksong News"
-	note.Sound = gosxnotifier.Default
-	note.Link = silksongURL
-	note.AppIcon = filepath.Join(homeDir, "Library", "Applications", "silksong-monitor", "logo.png")
-
-	return note.Push()
-}
-
 func monitorRepository() {
 	lastCommit := loadLastCommit()
 	log.Printf("Starting monitor with last commit: %s", lastCommit)
@@ -119,7 +106,12 @@ func monitorRepository() {
 			if lastCommit != "" { // Don't notify on first run
 				log.Printf("Repository updated! Old commit: %s, New commit: %s", lastCommit, currentCommit)
 
-				if err := sendNotification(); err != nil {
+				if err := sendNotification(
+					"Silksong News",
+					"Silksong status page has been updated!",
+					iconPath,
+					silksongURL,
+				); err != nil {
 					log.Printf("Error sending notification: %v", err)
 				}
 			}

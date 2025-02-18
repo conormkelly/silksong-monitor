@@ -5,9 +5,12 @@ SUPPORT_DIR=~/Library/Application\ Support/$(BINARY_NAME)
 AGENTS_DIR=~/Library/LaunchAgents
 PLIST_FILE=com.conormkelly.silksong-monitor.plist
 
-.PHONY: all build clean install uninstall test
+.PHONY: all build clean install uninstall test check-deps install-deps
 
 all: build
+
+check-deps:
+	@which terminal-notifier > /dev/null || (echo "Installing terminal-notifier..." && brew install terminal-notifier)
 
 build:
 	@mkdir -p $(BUILD_DIR)
@@ -16,7 +19,7 @@ build:
 clean:
 	@rm -rf $(BUILD_DIR)
 
-install: build
+install: check-deps build
 	@echo "Creating application directories..."
 	@mkdir -p $(INSTALL_DIR)
 	@mkdir -p $(SUPPORT_DIR)

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.conormkelly.silksong-monitor</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>HOMEDIR/Library/Applications/silksong-monitor/silksong-monitor</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+    <key>StandardOutPath</key>
+    <string>HOMEDIR/Library/Logs/silksong-monitor.log</string>
+    <key>StandardErrorPath</key>
+    <string>HOMEDIR/Library/Logs/silksong-monitor.log</string>
+    <key>WorkingDirectory</key>
+    <string>HOMEDIR/Library/Applications/silksong-monitor</string>
+</dict>
+</plist>
